@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ToastProvider> {/* ✅ wrap everything in ToastProvider */}
         <AuthProvider>
           <NotificationProvider>
