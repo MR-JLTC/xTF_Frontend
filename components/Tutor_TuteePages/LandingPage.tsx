@@ -219,6 +219,7 @@ const LandingPage: React.FC = () => {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
+  const [developersOpen, setDevelopersOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isTutorModalOpen, setIsTutorModalOpen] = useState(false);
@@ -795,6 +796,9 @@ const LandingPage: React.FC = () => {
                   <button type="button" onClick={() => setAboutOpen(true)} className="text-left text-slate-400 hover:text-sky-400 transition-colors">About Us</button>
                 </li>
                 <li className="w-max">
+                  <button type="button" onClick={() => setDevelopersOpen(true)} className="text-left text-slate-400 hover:text-sky-400 transition-colors">Meet the Developers</button>
+                </li>
+                <li className="w-max">
                   <button type="button" onClick={() => navigate('/admin-login')} className="text-left text-slate-400 hover:text-sky-400 transition-colors">Admin Portal</button>
                 </li>
                 <li className="w-max">
@@ -894,6 +898,72 @@ const LandingPage: React.FC = () => {
                 </li>
                 <li>Contact: questions about these terms? Email us at <span className="font-medium">darkages38@gmail.com</span>.</li>
               </ul>
+            </div>
+          </Modal>
+
+          {/* Meet the Developers Modal */}
+          <Modal
+            isOpen={developersOpen}
+            onClose={() => setDevelopersOpen(false)}
+            title="Meet the Developers"
+            maxWidth="2xl"
+          >
+            <div className="space-y-8 py-4 px-2">
+              <div className="text-center space-y-3">
+                <p className="text-slate-600 font-medium text-lg italic">
+                  "Meet the creative minds behind TutorFriends"
+                </p>
+                <div className="h-1 w-20 bg-sky-500 mx-auto rounded-full"></div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                {/* Developer 1 */}
+                <div className="flex flex-col items-center group">
+                  <div className="relative mb-6">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full blur opacity-25 group-hover:opacity-60 transition duration-500"></div>
+                    <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                      <img
+                        src="/assets/images/dev_pf2.jpg"
+                        alt="John Emmanuel De Vera"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition-colors">John Emmanuel De Vera</h3>
+                  <p className="text-sm font-semibold text-sky-500 uppercase tracking-widest mt-1">Lead Developer</p>
+                </div>
+
+                {/* Developer 2 */}
+                <div className="flex flex-col items-center group">
+                  <div className="relative mb-6">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-sky-500 rounded-full blur opacity-25 group-hover:opacity-60 transition duration-500"></div>
+                    <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                      <img
+                        src="/assets/images/dev_pf1.jpg"
+                        alt="Jhon Lloyd T. Cruz"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition-colors">Jhon Lloyd T. Cruz</h3>
+                  <p className="text-sm font-semibold text-indigo-500 uppercase tracking-widest mt-1">Lead Developer</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 mt-8">
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="bg-white p-2 rounded-lg shadow-sm border border-slate-100">
+                    <svg className="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                  </div>
+                  <h4 className="font-bold text-slate-800">Academic Background</h4>
+                </div>
+                <p className="text-slate-600 leading-relaxed">
+                  Both are dedicated <span className="text-slate-900 font-semibold">Bachelor of Science in Computer Science</span> students at <span className="text-sky-600 font-semibold italic">Bohol Island State University (BISU) - Calape Campus</span>.
+                  Driven by technology and community-building, they developed TutorFriends to empower Filipino students through peer-to-peer knowledge sharing.
+                </p>
+              </div>
             </div>
           </Modal>
 
