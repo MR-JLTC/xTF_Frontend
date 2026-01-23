@@ -45,7 +45,7 @@ export interface User {
   university_id?: number;
   course_id?: number;
   year_level?: number;
-  
+
   // Joined data from backend
   university?: University;
   course?: Course;
@@ -64,9 +64,9 @@ export interface Tutor {
   user_id: number;
   bio: string;
   status: 'pending' | 'approved' | 'rejected';
-  
+
   // Joined data from backend
-  user?: User; 
+  user?: User;
   documents: Document[];
 }
 
@@ -78,7 +78,7 @@ export interface TutorSubject {
   admin_notes?: string;
   created_at: string;
   updated_at: string;
-  
+
   // Joined data from backend
   tutor?: Tutor;
   subject?: Subject;
@@ -113,3 +113,14 @@ export enum Page {
 //   name: string;
 //   domain: string;
 // };
+
+export interface TrafficLog {
+  id: number;
+  ip_address: string;
+  activity: string;
+  user_email?: string;
+  method?: string;
+  url?: string;
+  user_agent?: string;
+  timestamp: string;
+}

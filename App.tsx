@@ -10,6 +10,7 @@ import TutorManagement from './components/adminPages/TutorManagement';
 import UniversityManagement from './components/adminPages/UniversityManagement';
 import CourseManagement from './components/adminPages/CourseManagement';
 import PaymentManagement from './components/adminPages/PaymentManagement';
+import TrafficLogs from './components/adminPages/TrafficLogs';
 import AdminProfile from './components/adminPages/AdminProfile';
 import LandingPage from './components/Tutor_TuteePages/LandingPage';
 import TuteeRegistrationPage from './components/Tutor_TuteePages/TuteeRegistrationPage';
@@ -49,19 +50,20 @@ const App: React.FC = () => {
               <Route path="universities" element={<UniversityManagement />} />
               <Route path="courses" element={<CourseManagement />} />
               <Route path="payments" element={<PaymentManagement />} />
+              <Route path="traffic" element={<TrafficLogs />} />
               <Route path="profile" element={<AdminProfile />} />
               <Route path="*" element={<Navigate to="/admin" replace />} />
             </Routes>
           </DashboardLayout>
         } />
-        
+
         {/* Tutor routes */}
         <Route path="tutor-dashboard/*" element={<TutorDashboard />} />
-        
+
         {/* Tutee routes */}
         <Route path="tutee-dashboard/*" element={<TuteeDashboard />} />
 
-          {/* Shared: Upcoming Sessions */}
+        {/* Shared: Upcoming Sessions */}
       </Route>
 
       {/* Default redirect for unmatched paths */}
