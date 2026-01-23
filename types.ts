@@ -113,14 +113,3 @@ export enum Page {
 //   name: string;
 //   domain: string;
 // };
-
-export interface TrafficLog {
-  id: number;
-  ip_address: string;
-  activity: string;
-  user_email?: string;
-  method?: string;
-  url?: string;
-  user_agent?: string;
-  timestamp: string;
-}

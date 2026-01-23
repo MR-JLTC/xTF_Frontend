@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, UserCheck, School, BookOpen, CreditCard, Activity } from 'lucide-react';
+import { LayoutDashboard, Users, UserCheck, School, BookOpen, CreditCard } from 'lucide-react';
 import { logoBase64 } from '../../assets/logo';
 
 const navLinks = [
@@ -10,7 +10,6 @@ const navLinks = [
   { to: '/admin/universities', icon: School, label: 'Universities' },
   { to: '/admin/courses', icon: BookOpen, label: 'Courses & Subjects' },
   { to: '/admin/payments', icon: CreditCard, label: 'Payments' },
-  { to: '/admin/traffic', icon: Activity, label: 'Live Traffic' },
 ];
 
 const Sidebar: React.FC = () => {
