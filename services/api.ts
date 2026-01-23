@@ -3,21 +3,23 @@ import { getActiveToken, getRoleForContext, clearRoleAuth } from '../utils/authR
 
 // The base URL for your NestJS backend
 // Priority: VITE_BACKEND_URL (production) > VITE_BACKEND_LAPTOP_IP (local/ngrok) > localhost
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL 
-  || import.meta.env.VITE_BACKEND_LAPTOP_IP 
-  || 'localhost';
+// const BACKEND_URL = import.meta.env.VITE_BACKEND_URL 
+//   || import.meta.env.VITE_BACKEND_LAPTOP_IP 
+//   || 'localhost'
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_SERVER_URL;
 
 // Check if BACKEND_URL is already a full URL or just a hostname
 const isFullUrl = BACKEND_URL.startsWith('http://') || BACKEND_URL.startsWith('https://');
-const backendBase = isFullUrl 
-  ? BACKEND_URL 
+const backendBase = isFullUrl
+  ? BACKEND_URL
   : `http://${BACKEND_URL}:3000`;
 const API_BASE_URL = `${backendBase}/api`;
 const API_ORIGIN = API_BASE_URL.replace(/\/?api$/, '');
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000, // 10 second timeout
+  timeout: 60000, // 60 second timeout
   // Do not set a global Content-Type header so multipart/form-data requests
   // can let the browser/axios set the correct boundary automatically.
   headers: {},
@@ -33,21 +35,21 @@ apiClient.interceptors.request.use(
   (config) => {
     const token = getActiveToken();
     const requestUrl = config.url || '';
-    
+
     // Check if this is an auth endpoint (login, register, password reset, etc.)
-    const isAuthEndpoint = requestUrl.includes('/auth/login') || 
-                          requestUrl.includes('/auth/register') || 
-                          requestUrl.includes('/auth/login-tutor-tutee') ||
-                          requestUrl.includes('/auth/forgot-password') ||
-                          requestUrl.includes('/auth/reset-password');
-    
+    const isAuthEndpoint = requestUrl.includes('/auth/login') ||
+      requestUrl.includes('/auth/register') ||
+      requestUrl.includes('/auth/login-tutor-tutee') ||
+      requestUrl.includes('/auth/forgot-password') ||
+      requestUrl.includes('/auth/reset-password');
+
     // Check if this is a public endpoint that doesn't require authentication
     // Public endpoints: landing stats, and GET /universities (list all universities)
     const normalizedUrl = requestUrl.split('?')[0]; // Remove query params for comparison
     const isPublicEndpoint = normalizedUrl.includes('/landing/stats') ||
-                            normalizedUrl === '/universities' || 
-                            normalizedUrl.endsWith('/universities'); // Only GET /universities list, not nested routes
-    
+      normalizedUrl === '/universities' ||
+      normalizedUrl.endsWith('/universities'); // Only GET /universities list, not nested routes
+
     if (token) {
       // Always add token if available
       config.headers.Authorization = `Bearer ${token}`;
@@ -55,13 +57,13 @@ apiClient.interceptors.request.use(
       // If no token and trying to access protected route (not an auth or public endpoint), redirect to login
       // But don't redirect if we're already on a login/registration/landing page
       const path = window.location.pathname.toLowerCase();
-      const isAuthPage = path.includes('/login') || 
-                        path.includes('/admin-login') || 
-                        path.includes('/landingpage') ||
-                        path.includes('/tuteeregistrationpage') ||
-                        path.includes('/tutorregistrationpage') ||
-                        path.includes('/register') ||
-                        path.includes('/password-reset');
+      const isAuthPage = path.includes('/login') ||
+        path.includes('/admin-login') ||
+        path.includes('/landingpage') ||
+        path.includes('/tuteeregistrationpage') ||
+        path.includes('/tutorregistrationpage') ||
+        path.includes('/register') ||
+        path.includes('/password-reset');
       if (!isAuthPage) {
         // Determine which login page to redirect to based on the route being accessed
         const isTutorOrTuteeRoute = path.startsWith('/tutor') || path.startsWith('/tutee');
@@ -160,12 +162,12 @@ apiClient.interceptors.response.use(
     // Check both the relative URL and full URL to ensure we catch auth endpoints correctly
     const fullUrl = error?.config?.baseURL ? `${error.config.baseURL}${reqUrl || ''}` : reqUrl || '';
     const urlToCheck = (reqUrl || '') + ' ' + fullUrl;
-    const isAuthEndpoint = urlToCheck.includes('/auth/login') || 
-                          urlToCheck.includes('/auth/register') || 
-                          urlToCheck.includes('/auth/login-tutor-tutee') ||
-                          urlToCheck.includes('/auth/forgot-password') ||
-                          urlToCheck.includes('/auth/reset-password') ||
-                          urlToCheck.includes('/auth/email-verification');
+    const isAuthEndpoint = urlToCheck.includes('/auth/login') ||
+      urlToCheck.includes('/auth/register') ||
+      urlToCheck.includes('/auth/login-tutor-tutee') ||
+      urlToCheck.includes('/auth/forgot-password') ||
+      urlToCheck.includes('/auth/reset-password') ||
+      urlToCheck.includes('/auth/email-verification');
     const isTutorIdEndpoint = reqUrl?.includes('/tutors/by-user/') && reqUrl?.includes('/tutor-id');
     const isCoursesEndpoint = reqUrl?.includes('/courses');
 
@@ -185,13 +187,13 @@ apiClient.interceptors.response.use(
       // Never redirect on auth endpoint errors - let the login pages handle the error display
       // Also don't redirect if we're already on a login page or public page to prevent navigation loops
       const currentPath = window.location.pathname.toLowerCase();
-      const isOnLoginPage = currentPath === '/login' || 
-                            currentPath === '/admin-login' || 
-                            currentPath.includes('/password-reset');
+      const isOnLoginPage = currentPath === '/login' ||
+        currentPath === '/admin-login' ||
+        currentPath.includes('/password-reset');
       const isOnPublicPage = currentPath.includes('/landingpage') ||
-                             currentPath.includes('/tuteeregistrationpage') ||
-                             currentPath.includes('/tutorregistrationpage');
-      
+        currentPath.includes('/tuteeregistrationpage') ||
+        currentPath.includes('/tutorregistrationpage');
+
       if (!isAuthEndpoint && !isOnLoginPage && !isOnPublicPage) {
         const role = getRoleForContext();
         if (role) {
@@ -217,7 +219,7 @@ export default apiClient;
 export const getFileUrl = (path: string | undefined | null): string => {
   if (!path) return '';
   if (/^https?:\/\//i.test(path)) return path;
-  
+
   // Profile images are served directly at /user_profile_images/ without /api prefix
   if (path.startsWith('/user_profile_images/') || path.startsWith('user_profile_images/')) {
     const normalized = path.startsWith('/') ? path : `/${path}`;
@@ -229,13 +231,13 @@ export const getFileUrl = (path: string | undefined | null): string => {
     const normalized = path.startsWith('/') ? path : `/${path}`;
     return `${API_ORIGIN}${normalized}`;
   }
-  
+
   // Files are served directly at /tutor_documents/ without /api prefix
   if (path.startsWith('/tutor_documents/') || path.startsWith('tutor_documents/')) {
     const normalized = path.startsWith('/') ? path : `/${path}`;
     return `${API_ORIGIN}${normalized}`;
   }
-  
+
   // For other files, use the standard path
   const normalized = path.startsWith('/') ? path : `/${path}`;
   return `${API_ORIGIN}${normalized}`;
