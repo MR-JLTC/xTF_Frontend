@@ -718,6 +718,124 @@ const TuteeBecomeTutor: React.FC = () => {
                 )}
               </div>
 
+              {/* Per-subject supporting documents */}
+              {selectedSubjects.size > 0 && (
+                <div className="space-y-4 mb-6">
+                  {Array.from(selectedSubjects).map((subject: string) => (
+                    <div
+                      key={`files-${subject}`}
+                      className="border rounded-lg p-3 bg-slate-50/50"
+                      onClick={(e) => {
+                        // Prevent any clicks in this section from bubbling up
+                        if (e.target !== e.currentTarget) {
+                          e.stopPropagation();
+                        }
+                      }}
+                      onMouseDown={(e) => {
+                        if (e.target !== e.currentTarget) {
+                          e.stopPropagation();
+                        }
+                      }}
+                    >
+                      <label className="block text-slate-700 font-semibold mb-1">
+                        Supporting documents for: <span className="text-indigo-700">{subject}</span>
+                        {(subjectFilesMap[subject] || []).length > 0 && (
+                          <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                            {(subjectFilesMap[subject] || []).length} file{(subjectFilesMap[subject] || []).length !== 1 ? 's' : ''} selected
+                          </span>
+                        )}
+                      </label>
+                      <p className="text-xs text-slate-500 mb-2">Upload proofs (PDF, PNG, JPG, JPEG). At least one file required.</p>
+                      <div
+                        className="relative"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        onMouseDown={(e) => {
+                          e.stopPropagation();
+                        }}
+                        onMouseUp={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        <input
+                          type="file"
+                          multiple
+                          accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg,image/jpg"
+                          onChange={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setIsFileSelecting(false);
+                            const files = Array.from(e.target.files || []);
+                            if (files.length === 0) {
+                              setIsFileSelecting(false);
+                              return;
+                            }
+                            setSubjectFilesMap((prev) => ({
+                              ...prev,
+                              [subject]: [...(prev[subject] || []), ...files],
+                            }));
+                            // Reset the input value after processing to allow re-selecting the same file
+                            setTimeout(() => {
+                              if (e.currentTarget) {
+                                e.currentTarget.value = '';
+                              }
+                            }, 0);
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setIsFileSelecting(true);
+                          }}
+                          onFocus={(e) => {
+                            e.stopPropagation();
+                            setIsFileSelecting(true);
+                          }}
+                          onBlur={(e) => {
+                            e.stopPropagation();
+                            setTimeout(() => setIsFileSelecting(false), 300);
+                          }}
+                          className="block w-full text-sm text-slate-700 file:mr-3 file:py-2 file:px-3 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                          id={`file-input-${subject}`}
+                        />
+                        {(subjectFilesMap[subject] || []).length > 0 && (
+                          <div className="mt-2">
+                            <p className="text-xs text-slate-600 font-medium mb-1">
+                              Selected files:
+                            </p>
+                            <ul className="list-none text-xs text-slate-600 space-y-1">
+                              {(subjectFilesMap[subject] || []).map((f, idx) => (
+                                <li key={`${subject}-f-${idx}`} className="flex items-center justify-between bg-white border border-slate-200 px-2 py-1 rounded">
+                                  <span className="truncate mr-2 flex-1" title={f.name}>{f.name}</span>
+                                  <span className="text-xs text-slate-400 mr-2">({(f.size / 1024).toFixed(1)} KB)</span>
+                                  <button
+                                    type="button"
+                                    className="text-red-600 hover:text-red-700 hover:underline flex-shrink-0"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setSubjectFilesMap((prev) => {
+                                        const next = { ...prev };
+                                        const arr = [...(next[subject] || [])];
+                                        arr.splice(idx, 1);
+                                        next[subject] = arr;
+                                        return next;
+                                      });
+                                    }}
+                                    aria-label={`Remove ${f.name}`}
+                                  >
+                                    remove
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {/* Add Subject Controls */}
               <div className="flex flex-col gap-3">
                 <div className="flex gap-2">

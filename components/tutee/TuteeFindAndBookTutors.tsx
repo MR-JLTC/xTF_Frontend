@@ -1793,47 +1793,61 @@ const TuteeFindAndBookTutors: React.FC = () => {
                             </div>
                           </div>
                           {tutorDocuments.length > 0 ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
-                              {tutorDocuments.map((doc: any, index: number) => (
-                                <div
-                                  key={doc.document_id || doc.id || index}
-                                  className="flex items-center justify-between bg-gradient-to-r from-slate-50 via-emerald-50/30 to-slate-50 rounded-lg p-3 sm:p-3.5 border-2 border-slate-200/50 hover:border-emerald-300 hover:shadow-md transition-all duration-200"
-                                >
-                                  <div className="flex items-center min-w-0 flex-1">
-                                    <div className="p-1.5 sm:p-2 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-lg mr-2.5 flex-shrink-0">
-                                      <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-600" />
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                              {tutorDocuments.map((doc: any, index: number) => {
+                                const isImage = (doc.file_type || '').startsWith('image/') || /\.(jpg|jpeg|png|gif|webp)$/i.test(doc.file_name || '');
+                                return (
+                                  <div
+                                    key={doc.document_id || doc.id || index}
+                                    onClick={() => {
+                                      if (doc.file_url) {
+                                        setSelectedDocument({
+                                          url: getFileUrl(doc.file_url),
+                                          type: doc.file_type || 'image/jpeg',
+                                          name: doc.file_name || `Document ${index + 1}`
+                                        });
+                                        setDocumentViewerOpen(true);
+                                      }
+                                    }}
+                                    className="group relative cursor-pointer bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-xl hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col h-32 sm:h-40"
+                                  >
+                                    {/* Preview/Thumbnail Area */}
+                                    <div className="flex-1 min-h-0 relative bg-slate-50 flex items-center justify-center overflow-hidden">
+                                      {isImage && doc.file_url ? (
+                                        <div className="absolute inset-0">
+                                          <img
+                                            src={getFileUrl(doc.file_url)}
+                                            alt={doc.file_name}
+                                            className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-500"
+                                            loading="lazy"
+                                          />
+                                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        </div>
+                                      ) : (
+                                        <div className="relative z-10 p-3 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform duration-300">
+                                          <FileText className={`w-8 h-8 sm:w-10 sm:h-10 ${doc.file_type === 'application/pdf' ? 'text-red-500' : 'text-emerald-500'}`} />
+                                        </div>
+                                      )}
+                                      {/* Hover Overlay Icon */}
+                                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none">
+                                        <div className="bg-black/30 backdrop-blur-sm p-2 rounded-full">
+                                          <Search className="w-5 h-5 text-white" />
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div className="min-w-0 flex-1">
-                                      <p className="text-xs sm:text-sm font-semibold text-slate-800 truncate" title={doc.file_name || `Document ${index + 1}`}>
+
+                                    {/* Footer Details */}
+                                    <div className="flex-shrink-0 p-3 bg-white border-t border-slate-100 relative z-30">
+                                      <p className="text-xs sm:text-sm font-semibold text-slate-700 truncate" title={doc.file_name || `Document ${index + 1}`}>
                                         {doc.file_name || `Document ${index + 1}`}
                                       </p>
-                                      <p className="text-[10px] sm:text-xs text-slate-500 truncate">
-                                        {doc.file_type || 'File'}
+                                      <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mt-0.5 truncate">
+                                        {doc.file_type?.split('/')[1] || 'FILE'}
                                       </p>
                                     </div>
                                   </div>
-                                  <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 ml-2">
-                                    {doc.file_url && (
-                                      <>
-                                        <button
-                                          onClick={() => {
-                                            setSelectedDocument({
-                                              url: getFileUrl(doc.file_url),
-                                              type: doc.file_type || 'image/jpeg',
-                                              name: doc.file_name || `Document ${index + 1}`
-                                            });
-                                            setDocumentViewerOpen(true);
-                                          }}
-                                          className="text-[10px] sm:text-xs px-2 sm:px-2.5 py-1 sm:py-1.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 rounded-lg font-semibold shadow-sm hover:shadow-md transition-all duration-200 whitespace-nowrap cursor-pointer border-none"
-                                          title="View document"
-                                        >
-                                          View
-                                        </button>
-                                      </>
-                                    )}
-                                  </div>
-                                </div>
-                              ))}
+                                );
+                              })}
                             </div>
                           ) : (
                             <div className="text-center py-6 sm:py-8 lg:py-10">
