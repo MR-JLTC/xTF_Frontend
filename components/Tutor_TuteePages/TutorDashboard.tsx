@@ -24,14 +24,14 @@ const TutorDashboard: React.FC = () => {
           <div className="lg:col-span-4 w-full">
             <Routes>
               <Route path="/" element={<Navigate to="/tutor-dashboard/application" replace />} />
-              <Route path="/application" element={<ApplicationVerification />} />
-              <Route path="/profile" element={<ProfileSetup />} />
-              <Route path="/availability" element={<AvailabilityScheduling />} />
-              <Route path="/sessions" element={<SessionHandling />} />
-              <Route path="/upcoming-sessions" element={<UpcomingSessionsPage />} />
-              <Route path="/earnings" element={<EarningsHistory />} />
-              <Route path="/earnings/payments" element={<PaymentsHistoryPage />} />
-              <Route path="/session-history" element={<SessionHistory />} />
+              <Route path="application" element={<ApplicationVerification />} />
+              <Route path="profile" element={<ProfileSetup />} />
+              <Route path="availability" element={<AvailabilityScheduling />} />
+              <Route path="sessions" element={<SessionHandling />} />
+              <Route path="upcoming-sessions" element={<UpcomingSessionsPage />} />
+              <Route path="earnings" element={<EarningsHistory />} />
+              <Route path="earnings/payments" element={<PaymentsHistoryPage />} />
+              <Route path="session-history" element={<SessionHistory />} />
               <Route path="*" element={<Navigate to="/tutor-dashboard/application" replace />} />
             </Routes>
           </div>

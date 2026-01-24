@@ -23,13 +23,13 @@ const TuteeDashboard: React.FC = () => {
         <div className={isMyBookingsRoute ? "lg:col-span-3" : "lg:col-span-4"}>
           <Routes>
             <Route path="/" element={<Navigate to="/tutee-dashboard/become-tutor" replace />} />
-            <Route path="/become-tutor" element={<TuteeBecomeTutor />} />
-            <Route path="/find-tutors" element={<TuteeFindAndBookTutors />} />
-            <Route path="/my-bookings" element={<TuteeMyBookings />} />
-            <Route path="/profile" element={<TuteeProfile />} />
-            <Route path="/upcoming-sessions" element={<UpcomingSessionsPage />} />
-            <Route path="/payment" element={<TuteePayment />} />
-            <Route path="/after-session" element={<TuteeAfterSession />} />
+            <Route path="become-tutor" element={<TuteeBecomeTutor />} />
+            <Route path="find-tutors" element={<TuteeFindAndBookTutors />} />
+            <Route path="my-bookings" element={<TuteeMyBookings />} />
+            <Route path="profile" element={<TuteeProfile />} />
+            <Route path="upcoming-sessions" element={<UpcomingSessionsPage />} />
+            <Route path="payment" element={<TuteePayment />} />
+            <Route path="after-session" element={<TuteeAfterSession />} />
             <Route path="*" element={<Navigate to="/tutee-dashboard/become-tutor" replace />} />
           </Routes>
         </div>
