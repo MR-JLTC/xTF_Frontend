@@ -30,9 +30,13 @@ const TuteeBecomeTutor: React.FC = () => {
   const tuteeCourseName = (user as any)?.course?.course_name || (user as any)?.course_name || '';
   const tuteeYearLevel = (user as any)?.year_level ? String((user as any).year_level) : '';
   const tuteeUniversityId = (user as any)?.university_id || '';
-  const tuteeUniversityName = (user as any)?.university?.name || (user as any)?.university_name || '';
+
+  const initialUniversityName = (user as any)?.university?.name || ((user as any)?.university && (user as any).university.university_name) || (user as any)?.university_name || '';
+  const initialCourseName = (user as any)?.course?.course_name || ((user as any)?.course && (user as any).course.name) || (user as any)?.course_name || '';
 
   // Form State
+  const [fetchedUniversityName, setFetchedUniversityName] = useState('');
+  const [fetchedCourseName, setFetchedCourseName] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [bio, setBio] = useState('');
@@ -47,6 +51,14 @@ const TuteeBecomeTutor: React.FC = () => {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [gcashQRImage, setGcashQRImage] = useState<File | null>(null);
   const [availability, setAvailability] = useState<Record<string, DayAvailability>>({});
+
+  // Computed Values
+  const normalizedSelected = useMemo(() => new Set(Array.from(selectedSubjects).map((s: string) => s.toLowerCase())), [selectedSubjects]);
+  const otherSubjectExistsInDropdown = useMemo(() => {
+    const trimmed = otherSubject.trim().toLowerCase();
+    if (!trimmed) return false;
+    return availableSubjects.some(s => s.subject_name.toLowerCase() === trimmed);
+  }, [otherSubject, availableSubjects]);
 
   // UI State
   const [isFileSelecting, setIsFileSelecting] = useState(false);
@@ -89,9 +101,35 @@ const TuteeBecomeTutor: React.FC = () => {
   const remainingDays = useMemo(() => daysOfWeek.filter(d => !addedDays.includes(d)), [addedDays]);
 
   // Effects
+  // Fetch missing University/Course names and Subjects
   useEffect(() => {
-    if (tuteeUniversityId && tuteeCourseId) {
-      (async () => {
+    const fetchData = async () => {
+      // Fetch University Name if missing
+      if (tuteeUniversityId && !initialUniversityName && !fetchedUniversityName) {
+        try {
+          const res = await apiClient.get(`/universities/${tuteeUniversityId}`);
+          if (res.data) {
+            setFetchedUniversityName(res.data.name || res.data.university_name || '');
+          }
+        } catch (e) {
+          console.error('Error fetching university details:', e);
+        }
+      }
+
+      // Fetch Course Name if missing
+      if (tuteeCourseId && !initialCourseName && !fetchedCourseName) {
+        try {
+          const res = await apiClient.get(`/courses/${tuteeCourseId}`);
+          if (res.data) {
+            setFetchedCourseName(res.data.course_name || res.data.name || '');
+          }
+        } catch (e) {
+          console.error('Error fetching course details:', e);
+        }
+      }
+
+      // Fetch Subjects
+      if (tuteeUniversityId && tuteeCourseId) {
         try {
           const params = {
             university_id: tuteeUniversityId,
@@ -102,9 +140,41 @@ const TuteeBecomeTutor: React.FC = () => {
         } catch (e) {
           console.error('Error fetching subjects:', e);
         }
-      })();
+      }
+    };
+
+    fetchData();
+  }, [tuteeUniversityId, tuteeCourseId, initialUniversityName, initialCourseName, fetchedUniversityName, fetchedCourseName]);
+
+  const handleAddSubject = () => {
+    if (subjectToAdd && !selectedSubjects.has(subjectToAdd)) {
+      setSelectedSubjects(prev => new Set(prev).add(subjectToAdd));
+      setSubjectFilesMap(prev => ({ ...prev, [subjectToAdd]: prev[subjectToAdd] || [] }));
+      setSubjectToAdd('');
     }
-  }, [tuteeUniversityId, tuteeCourseId]);
+  };
+
+  const handleAddOtherSubject = () => {
+    const trimmedSubject = otherSubject.trim();
+    if (trimmedSubject && !selectedSubjects.has(trimmedSubject)) {
+      setSelectedSubjects(prev => new Set(prev).add(trimmedSubject));
+      setSubjectFilesMap(prev => ({ ...prev, [trimmedSubject]: prev[trimmedSubject] || [] }));
+      setOtherSubject('');
+    }
+  };
+
+  const handleRemoveSubject = (subjectToRemove: string) => {
+    setSelectedSubjects(prev => {
+      const newSubjects = new Set(prev);
+      newSubjects.delete(subjectToRemove);
+      return newSubjects;
+    });
+    setSubjectFilesMap(prev => {
+      const next = { ...prev };
+      delete next[subjectToRemove];
+      return next;
+    });
+  };
 
   // Availability Helpers
   const normalizeTime = (raw: string) => {
@@ -380,17 +450,7 @@ const TuteeBecomeTutor: React.FC = () => {
     setTimeout(() => { if (e.target) e.target.value = ''; setIsFileSelecting(false); }, 100);
   };
 
-  const handleAddSubject = () => {
-    if (subjectToAdd && !selectedSubjects.has(subjectToAdd)) {
-      setSelectedSubjects(prev => new Set(prev).add(subjectToAdd));
-      setSubjectToAdd('');
-    }
-  };
 
-  const handleRemoveSubject = (s: string) => {
-    setSelectedSubjects(prev => { const n = new Set(prev); n.delete(s); return n; });
-    setSubjectFilesMap(prev => { const n = { ...prev }; delete n[s]; return n; });
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -518,44 +578,46 @@ const TuteeBecomeTutor: React.FC = () => {
               </div>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">University</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={tuteeUniversityName}
-                  readOnly
-                  disabled
-                  className="w-full p-3 bg-slate-50 rounded-xl text-slate-700 font-medium border border-slate-100 focus:outline-none"
-                />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Course</label>
+              <label className="block text-sm sm:text-base text-slate-700 font-semibold mb-1">University</label>
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                  <BookOpen className="w-4 h-4" />
+                  <GraduationCap className="h-5 w-5" />
                 </div>
                 <input
                   type="text"
-                  value={tuteeCourseName}
-                  readOnly
+                  value={initialUniversityName || fetchedUniversityName || 'Loading...'}
                   disabled
-                  className="w-full p-3 bg-slate-50 rounded-xl text-slate-700 font-medium border border-slate-100 pl-10 focus:outline-none"
+                  className="w-full pl-10 pr-3 py-2 text-sm sm:text-base border border-slate-300 rounded-lg bg-slate-100 text-slate-500 cursor-not-allowed"
                 />
               </div>
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Year Level</label>
+
+            <div className="w-full sm:col-span-2 lg:col-span-4">
+              <label className="block text-sm sm:text-base text-slate-700 font-semibold mb-1">Course</label>
               <div className="relative">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                  <YearLevelIcon className="w-4 h-4" />
+                  <BookOpen className="h-5 w-5" />
                 </div>
                 <input
                   type="text"
-                  value={tuteeYearLevel ? `${tuteeYearLevel} Year` : ''}
-                  readOnly
+                  value={initialCourseName || fetchedCourseName || 'Loading...'}
                   disabled
-                  className="w-full p-3 bg-slate-50 rounded-xl text-slate-700 font-medium border border-slate-100 pl-10 focus:outline-none"
+                  className="w-full pl-10 pr-3 py-2 text-sm sm:text-base border border-slate-300 rounded-lg bg-slate-100 text-slate-500 cursor-not-allowed"
+                />
+              </div>
+            </div>
+
+            <div className="w-full sm:col-span-1 lg:col-span-3">
+              <label className="block text-sm sm:text-base text-slate-700 font-semibold mb-1">Year Level</label>
+              <div className="relative">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                  <YearLevelIcon className="h-5 w-5" />
+                </div>
+                <input
+                  type="text"
+                  value={tuteeYearLevel ? `${tuteeYearLevel}${['st', 'nd', 'rd'][Number(tuteeYearLevel) - 1] || 'th'} Year` : ''}
+                  disabled
+                  className="w-full pl-10 pr-3 py-2 text-sm sm:text-base border border-slate-300 rounded-lg bg-slate-100 text-slate-500 cursor-not-allowed"
                 />
               </div>
             </div>
@@ -633,29 +695,80 @@ const TuteeBecomeTutor: React.FC = () => {
               <div className="w-8 h-8 bg-sky-50 rounded-lg flex items-center justify-center">
                 <BookOpen className="w-4 h-4 text-sky-600" />
               </div>
-              <h2 className="text-xl font-bold text-slate-800">3. Subjects</h2>
+              <h2 className="text-xl font-bold text-slate-800">3. Subjects of Expertise</h2>
             </div>
             <div className="space-y-4">
-              <div className="flex gap-2">
-                <select
-                  value={subjectToAdd}
-                  onChange={(e) => setSubjectToAdd(e.target.value)}
-                  className="flex-1 p-3 bg-slate-50 rounded-xl border border-slate-100"
-                >
-                  <option value="">Select a subject...</option>
-                  {availableSubjects.filter(s => !selectedSubjects.has(s.subject_name)).map(s => (
-                    <option key={s.subject_id} value={s.subject_name}>{s.subject_name}</option>
-                  ))}
-                </select>
-                <button type="button" onClick={handleAddSubject} className="p-3 bg-sky-600 text-white rounded-xl hover:bg-sky-700"><Plus className="w-5 h-5" /></button>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {Array.from(selectedSubjects).map(s => (
-                  <span key={s} className="bg-sky-50 text-sky-700 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-2 group">
-                    {s}
-                    <button type="button" onClick={() => handleRemoveSubject(s)} className="text-sky-300 hover:text-sky-600 transition-colors"><X className="w-3 h-3" /></button>
-                  </span>
+              {/* Selected Subjects List */}
+              <div className="flex flex-wrap gap-2 mb-4 min-h-[2.5rem] items-center">
+                {Array.from(selectedSubjects).map((subject: string) => (
+                  <div key={subject} className="flex items-center bg-indigo-100 text-indigo-800 text-sm font-medium pl-3 pr-2 py-1 rounded-full">
+                    {subject}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveSubject(subject)}
+                      className="ml-2 flex-shrink-0 bg-indigo-200 hover:bg-indigo-300 text-indigo-800 rounded-full p-0.5"
+                      aria-label={`Remove ${subject}`}
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
                 ))}
+                {selectedSubjects.size === 0 && (
+                  <p className="text-sm text-slate-500">No subjects selected yet.</p>
+                )}
+              </div>
+
+              {/* Add Subject Controls */}
+              <div className="flex flex-col gap-3">
+                <div className="flex gap-2">
+                  <select
+                    value={subjectToAdd}
+                    onChange={(e) => setSubjectToAdd(e.target.value)}
+                    className="flex-1 p-3 bg-slate-50 rounded-xl border border-slate-100"
+                  >
+                    <option value="">Select a subject...</option>
+                    {availableSubjects
+                      .filter(s => !selectedSubjects.has(s.subject_name))
+                      .map(s => <option key={s.subject_id} value={s.subject_name}>{s.subject_name}</option>)}
+                    <option value="other">Other</option>
+                  </select>
+                  <button
+                    type="button"
+                    onClick={handleAddSubject}
+                    disabled={!subjectToAdd || subjectToAdd === 'other'}
+                    className="p-3 bg-sky-600 text-white rounded-xl hover:bg-sky-700 disabled:bg-slate-300"
+                  >
+                    <Plus className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Other Subject Input */}
+                {subjectToAdd === 'other' && (
+                  <div className="space-y-2 animate-in slide-in-from-top-2">
+                    <label htmlFor="other-subject" className="block text-slate-600 text-xs font-semibold uppercase">Add Custom Subject</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        id="other-subject"
+                        value={otherSubject}
+                        onChange={(e) => {
+                          const filteredValue = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                          setOtherSubject(filteredValue);
+                        }}
+                        placeholder="e.g., Astrophysics"
+                        className="flex-1 p-3 bg-slate-50 rounded-xl border border-slate-100"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleAddOtherSubject}
+                        disabled={!otherSubject.trim() || otherSubjectExistsInDropdown}
+                        className="p-3 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 disabled:bg-slate-300"
+                      >
+                        <Plus className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
