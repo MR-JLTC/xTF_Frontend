@@ -491,7 +491,7 @@ const TuteeSidebar: React.FC = () => {
       <div className="px-4 py-4 border-b border-slate-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <img src={logoBase64} alt="TutorFriends Logo" className="h-10 w-auto object-contain" />
+            <img src={logoBase64} alt="TutorFriends Logo" className="h-14 w-auto object-contain" />
             <div>
               <h1 className="text-lg font-bold text-slate-800">TutorFriends</h1>
               <p className="text-xs text-slate-600 font-medium">Student Dashboard</p>

@@ -380,7 +380,7 @@ const LandingPage: React.FC = () => {
 
         <div className="max-w-7xl mx-auto flex items-center justify-between relative">
           {/* Logo and Brand Section */}
-          <div className="flex items-center group cursor-pointer space-x-3" onClick={() => navigate('/LandingPage')}>
+          <div className="flex items-center group cursor-pointer space-x-1" onClick={() => navigate('/LandingPage')}>
             <Logo className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto transition-all duration-300" />
             <div className="flex flex-col">
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">

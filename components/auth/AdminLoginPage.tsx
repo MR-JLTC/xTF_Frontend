@@ -78,7 +78,7 @@ const LoginPage: React.FC = () => {
               <div className="mb-8">
                 <div className="flex flex-col lg:flex-row items-center lg:justify-between lg:items-end gap-4">
                   <div className="flex flex-col lg:flex-row items-center gap-0">
-                    <Logo className="h-11 w-auto text-sky-600" />
+                    <Logo className="h-14 w-auto text-sky-600" />
                     <span className="text-2xl font-bold bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent tracking-tight text-center lg:text-left lg:-ml-1.5">TutorFriends</span>
                   </div>
                   <div className="text-center lg:text-right pb-0.5">
