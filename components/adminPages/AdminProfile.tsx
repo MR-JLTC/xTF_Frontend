@@ -12,6 +12,10 @@ const AdminProfile: React.FC = () => {
   const [selectedQr, setSelectedQr] = useState<File | null>(null);
   const [qrPreview, setQrPreview] = useState<string | null>(null);
 
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
+  const [isUploadingProfile, setIsUploadingProfile] = useState(false);
+
   const load = async () => {
     if (!user?.user_id) return;
     setLoading(true);
@@ -30,6 +34,48 @@ const AdminProfile: React.FC = () => {
     setSelectedQr(file);
     if (qrPreview) URL.revokeObjectURL(qrPreview);
     setQrPreview(URL.createObjectURL(file));
+  };
+
+  const onChooseProfileImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    setProfileImage(file);
+    if (profileImagePreview) URL.revokeObjectURL(profileImagePreview);
+    setProfileImagePreview(URL.createObjectURL(file));
+  };
+
+  const onSaveProfileImage = async () => {
+    if (!user?.user_id || !profileImage) return;
+
+    try {
+      setIsUploadingProfile(true);
+      const fd = new FormData();
+      fd.append('file', profileImage);
+
+      const res = await apiClient.post(`/users/${user.user_id}/profile-image`, fd, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      // Update local storage user if needed, or just reload details
+      // If header uses useAuth(), we might need to update that context via localStorage or reload
+      const updatedUser = { ...user, profile_image_url: res.data.profile_image_url };
+      localStorage.setItem('user', JSON.stringify(updatedUser)); // Primitive way to update context on reload
+
+      await load();
+      setProfileImage(null);
+      if (profileImagePreview) {
+        URL.revokeObjectURL(profileImagePreview);
+        setProfileImagePreview(null);
+      }
+
+      // Force reload to update header image which reads from AuthContext/localStorage
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to upload profile image');
+    } finally {
+      setIsUploadingProfile(false);
+    }
   };
 
   const onSave = async () => {
@@ -66,17 +112,38 @@ const AdminProfile: React.FC = () => {
 
       <Card className="p-4">
         <div className="flex items-center gap-4">
-          <img
-            src={getFileUrl(details.profile_image_url || '')}
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(details.name || 'Admin')}&background=random`;
-            }}
-            alt={details.name}
-            className="h-16 w-16 rounded-full object-cover border"
-            style={{ aspectRatio: '1 / 1' }}
-          />
+          <div className="flex flex-col items-center gap-2">
+            <div className="relative">
+              <img
+                src={profileImagePreview || getFileUrl(details.profile_image_url || '')}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(details.name || 'Admin')}&background=random`;
+                }}
+                alt={details.name}
+                className="h-24 w-24 rounded-full object-cover border"
+                style={{ aspectRatio: '1 / 1' }}
+              />
+              <label
+                className="absolute bottom-0 right-0 bg-white rounded-full p-1 border shadow cursor-pointer hover:bg-gray-100"
+                title="Change profile photo"
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={onChooseProfileImage}
+                />
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+              </label>
+            </div>
+            {profileImage && (
+              <Button size="sm" onClick={onSaveProfileImage} disabled={isUploadingProfile}>
+                {isUploadingProfile ? 'Uploading...' : 'Save Photo'}
+              </Button>
+            )}
+          </div>
           <div>
-            <div className="text-slate-800 font-semibold">{details.name}</div>
+            <div className="text-slate-800 font-semibold text-lg">{details.name}</div>
             <div className="text-slate-600 text-sm">{details.email}</div>
           </div>
         </div>
