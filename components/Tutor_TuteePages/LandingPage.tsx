@@ -93,7 +93,7 @@ interface Slide {
 const slides: Slide[] = [
   {
     src: '/assets/images/dev_slideMain.jpg',
-    alt: 'The CEO & Developer of the company'
+    alt: 'The CEO & Developer of the companys'
   },
   {
     src: '/assets/images/dev_slide1.png',
