@@ -26,13 +26,15 @@ const TuteeBecomeTutor: React.FC = () => {
   // Pre-filled values from tutee profile
   const tuteeEmail = user?.email || '';
   const tuteeFullName = user?.name || '';
-  const tuteeCourseId = (user as any)?.course_id || '';
-  const tuteeCourseName = (user as any)?.course?.course_name || (user as any)?.course_name || '';
-  const tuteeYearLevel = (user as any)?.year_level ? String((user as any).year_level) : '';
-  const tuteeUniversityId = (user as any)?.university_id || '';
 
-  const initialUniversityName = (user as any)?.university?.name || ((user as any)?.university && (user as any).university.university_name) || (user as any)?.university_name || '';
-  const initialCourseName = (user as any)?.course?.course_name || ((user as any)?.course && (user as any).course.name) || (user as any)?.course_name || '';
+  const profile = (user as any)?.student_profile || (user as any)?.tutor_profile;
+  const tuteeCourseId = profile?.course_id || (user as any)?.course_id || '';
+  const tuteeCourseName = profile?.course?.course_name || profile?.course_name || (user as any)?.course?.course_name || (user as any)?.course_name || '';
+  const tuteeYearLevel = profile?.year_level ? String(profile.year_level) : (user as any)?.year_level ? String((user as any).year_level) : '';
+  const tuteeUniversityId = profile?.university_id || (user as any)?.university_id || '';
+
+  const initialUniversityName = profile?.university?.name || profile?.university?.university_name || (user as any)?.university?.name || ((user as any)?.university && (user as any).university.university_name) || (user as any)?.university_name || '';
+  const initialCourseName = profile?.course?.course_name || profile?.course?.name || (user as any)?.course?.course_name || ((user as any)?.course && (user as any).course.name) || (user as any)?.course_name || '';
 
   // Form State
   const [fetchedUniversityName, setFetchedUniversityName] = useState('');
