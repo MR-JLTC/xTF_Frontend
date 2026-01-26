@@ -1031,7 +1031,7 @@ const LandingPage: React.FC = () => {
                         <div className="absolute -inset-4 bg-sky-100/50 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         <div className="relative w-32 h-32 rounded-2xl -rotate-3 overflow-hidden border-4 border-white shadow-xl ring-1 ring-sky-100">
                           <img
-                            src="/assets/images/dev_pf2.jpg" // COO
+                            src="/assets/images/dev_slide1c.png" // COO
                             alt="COO"
                             className="w-full h-full object-cover"
                           />
@@ -1053,38 +1053,16 @@ const LandingPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Academic Background Block */}
-                <div className="mt-12 bg-slate-900 rounded-2xl p-8 relative overflow-hidden shadow-2xl">
-                  <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
-                  <div className="absolute bottom-0 left-0 w-96 h-96 bg-sky-500/20 rounded-full blur-3xl -ml-32 -mb-32"></div>
-
-                  <div className="relative z-10 flex flex-col sm:flex-row items-center gap-8 text-center sm:text-left">
-                    <div className="shrink-0 p-4 bg-white/10 rounded-2xl backdrop-blur-md border border-white/10 text-sky-400 shadow-lg">
-                      <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                      </svg>
-                    </div>
-                    <div className="space-y-2">
-                      <h4 className="text-xl font-bold text-white">Academic Roots at BISU-Calape</h4>
-                      <p className="text-slate-300 leading-relaxed max-w-2xl">
-                        Proud students of the <span className="text-sky-400 font-semibold">Bachelor of Science in Computer Science</span>.
-                        We are dedicated to applying our academic knowledge to create meaningful technological solutions for the student community.
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </Modal>
 
-          <div className="border-t border-slate-700/50 pt-8 mt-12 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-slate-500 text-sm order-2 md:order-1">&copy; {new Date().getFullYear()} TutorFriends. All rights reserved.</p>
+          <div className="border-t border-slate-700/50 pt-8 mt-12 flex flex-col items-center justify-center gap-4">
+            <p className="text-slate-500 text-sm text-center">&copy; {new Date().getFullYear()} TutorFriends. All rights reserved.</p>
 
             <button
               type="button"
-              className="order-1 md:order-2 flex items-center gap-3 group cursor-pointer px-2 py-1 rounded-xl transition-all duration-300 focus:outline-none"
+              className="flex items-center gap-3 group cursor-pointer px-2 py-1 rounded-xl transition-all duration-300 focus:outline-none"
               onClick={() => setDevelopersOpen(true)}
             >
               <span className="text-xs text-slate-500 group-hover:text-slate-300 transition-colors font-medium">Developed by</span>
