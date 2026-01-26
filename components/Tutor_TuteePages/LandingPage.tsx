@@ -1071,15 +1071,22 @@ const LandingPage: React.FC = () => {
             </div>
           </Modal>
 
-          <div className="border-t border-slate-800/50 pt-8 mt-8 text-center">
-            <p className="text-slate-500 text-sm mb-4">&copy; {new Date().getFullYear()} TutorFriends. All rights reserved.</p>
+          <div className="border-t border-slate-700/50 pt-8 mt-12 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-slate-500 text-sm order-2 md:order-1">&copy; {new Date().getFullYear()} TutorFriends. All rights reserved.</p>
 
-            <div className="inline-flex items-center justify-center p-1 rounded-full bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm transition-all duration-300 hover:bg-slate-800 hover:border-sky-500/30 group cursor-pointer" onClick={() => setDevelopersOpen(true)}>
-              <span className="px-3 py-1 text-xs text-slate-400 group-hover:text-slate-300 transition-colors">Developed by</span>
-              <span className="px-3 py-1 text-xs font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 group-hover:from-sky-300 group-hover:to-indigo-300 rounded-full bg-white/5 border border-white/5 shadow-sm transition-all">
-                BahandiSoft
-              </span>
-            </div>
+            <button
+              type="button"
+              className="order-1 md:order-2 flex items-center gap-3 group cursor-pointer px-2 py-1 rounded-xl transition-all duration-300 focus:outline-none"
+              onClick={() => setDevelopersOpen(true)}
+            >
+              <span className="text-xs text-slate-500 group-hover:text-slate-300 transition-colors font-medium">Developed by</span>
+              <div className="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/50 group-hover:border-sky-500/30 px-3 py-1.5 rounded-lg backdrop-blur-sm transition-all duration-300 shadow-sm group-hover:shadow-[0_0_15px_-3px_rgba(56,189,248,0.2)]">
+                <img src="/assets/images/bahandisoft.png" alt="BahandiSoft" className="w-5 h-5 object-contain" />
+                <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 group-hover:from-sky-300 group-hover:to-indigo-300 transition-all">
+                  BahandiSoft
+                </span>
+              </div>
+            </button>
           </div>
         </div>
       </footer>
