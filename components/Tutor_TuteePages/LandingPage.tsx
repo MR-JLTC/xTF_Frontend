@@ -968,86 +968,118 @@ const LandingPage: React.FC = () => {
             </div>
           </Modal>
 
-          {/* Meet the Developers Modal */}
+          {/* BahandiSoft Company Modal */}
           <Modal
             isOpen={developersOpen}
             onClose={() => setDevelopersOpen(false)}
-            title="BahandiSoft"
-            maxWidth="2xl"
+            title="" // Custom header inside
+            maxWidth="3xl"
           >
-            <div className="space-y-6 py-4 px-2">
-              <div className="flex flex-col items-center justify-center space-y-4 mb-8">
-                <div className="w-48 h-auto">
-                  <img src="/assets/images/bahandisoft.png" alt="BahandiSoft Logo" className="w-full h-full object-contain" />
+            <div className="relative">
+              {/* Modern Header Section */}
+              <div className="text-center space-y-4 pt-2 pb-8 border-b border-slate-100">
+                <div className="w-48 mx-auto filter drop-shadow-sm hover:drop-shadow-md transition-all duration-300">
+                  <img src="/assets/images/bahandisoft.png" alt="BahandiSoft" className="w-full h-auto object-contain" />
                 </div>
-                <div className="text-center space-y-2">
-                  <p className="text-slate-600 font-medium text-lg italic">
-                    "Innovating Education, One Line of Code at a Time"
+                <div className="max-w-md mx-auto">
+                  <p className="text-slate-600 font-medium text-lg italic relative inline-block">
+                    <span className="text-sky-400 absolute -top-2 -left-2 text-2xl">"</span>
+                    Innovating Education, One Line of Code at a Time
+                    <span className="text-indigo-400 absolute -bottom-4 -right-2 text-2xl leading-[0]">"</span>
                   </p>
-                  <div className="h-1 w-20 bg-sky-500 mx-auto rounded-full"></div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                {/* Developer 1 */}
-                <div className="flex flex-col items-center group">
-                  <div className="relative mb-6">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full blur opacity-25 group-hover:opacity-60 transition duration-500"></div>
-                    <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                      <img
-                        src="/assets/images/dev_pf2.jpg"
-                        alt="John Emmanuel De Vera"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
+              <div className="py-8 px-2 sm:px-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                  {/* CEO Card */}
+                  <div className="group relative bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1">
+                    <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-indigo-500 to-sky-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="flex flex-col items-center">
+                      <div className="relative mb-4">
+                        <div className="absolute -inset-2 bg-gradient-to-r from-indigo-500 to-sky-500 rounded-full opacity-0 group-hover:opacity-20 blur-md transition-opacity duration-300"></div>
+                        <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg group-hover:border-indigo-50 transition-colors">
+                          <img
+                            src="/assets/images/dev_pf1.jpg"
+                            alt="Jhon Lloyd T. Cruz"
+                            className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+                          />
+                        </div>
+                        <div className="absolute bottom-0 right-0 bg-indigo-500 text-white text-[10px] font-bold px-2 py-1 rounded-full border-2 border-white shadow-sm">
+                          CEO
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-800 group-hover:text-indigo-600 transition-colors text-center">Jhon Lloyd T. Cruz</h3>
+                      <p className="text-sm font-medium text-slate-500 mt-1 uppercase tracking-wide">Chief Executive Officer</p>
+                      <div className="mt-4 flex space-x-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                        <div className="h-1 w-8 bg-indigo-500 rounded-full"></div>
+                        <div className="h-1 w-2 bg-sky-500 rounded-full"></div>
+                      </div>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition-colors">John Emmanuel De Vera</h3>
-                  <p className="text-sm font-semibold text-sky-500 uppercase tracking-widest mt-1">COO</p>
-                </div>
 
-                {/* Developer 2 */}
-                <div className="flex flex-col items-center group">
-                  <div className="relative mb-6">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-sky-500 rounded-full blur opacity-25 group-hover:opacity-60 transition duration-500"></div>
-                    <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                      <img
-                        src="/assets/images/dev_pf1.jpg"
-                        alt="Jhon Lloyd T. Cruz"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
+                  {/* COO Card */}
+                  <div className="group relative bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1">
+                    <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="flex flex-col items-center">
+                      <div className="relative mb-4">
+                        <div className="absolute -inset-2 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full opacity-0 group-hover:opacity-20 blur-md transition-opacity duration-300"></div>
+                        <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg group-hover:border-sky-50 transition-colors">
+                          <img
+                            src="/assets/images/dev_pf2.jpg"
+                            alt="John Emmanuel De Vera"
+                            className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
+                          />
+                        </div>
+                        <div className="absolute bottom-0 right-0 bg-sky-500 text-white text-[10px] font-bold px-2 py-1 rounded-full border-2 border-white shadow-sm">
+                          COO
+                        </div>
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-800 group-hover:text-sky-600 transition-colors text-center">John Emmanuel De Vera</h3>
+                      <p className="text-sm font-medium text-slate-500 mt-1 uppercase tracking-wide">Chief Operating Officer</p>
+                      <div className="mt-4 flex space-x-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                        <div className="h-1 w-8 bg-sky-500 rounded-full"></div>
+                        <div className="h-1 w-2 bg-indigo-500 rounded-full"></div>
+                      </div>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition-colors">Jhon Lloyd T. Cruz</h3>
-                  <p className="text-sm font-semibold text-indigo-500 uppercase tracking-widest mt-1">CEO</p>
                 </div>
-              </div>
 
-              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 mt-8">
-                <div className="flex items-center space-x-4 mb-4">
-                  <div className="bg-white p-2 rounded-lg shadow-sm border border-slate-100">
-                    <svg className="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                    </svg>
+                {/* Academic Background Block */}
+                <div className="mt-10 bg-gradient-to-br from-slate-50 to-white rounded-2xl p-6 sm:p-8 border border-slate-100 shadow-inner relative overflow-hidden">
+                  <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-sky-100 rounded-full opacity-50 blur-2xl"></div>
+                  <div className="absolute bottom-0 left-0 -mb-4 -ml-4 w-24 h-24 bg-indigo-100 rounded-full opacity-50 blur-2xl"></div>
+
+                  <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+                    <div className="flex-shrink-0 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+                      <svg className="w-8 h-8 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
+                        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-lg mb-1">Academic Roots</h4>
+                      <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
+                        Proud students of the <span className="font-semibold text-slate-900">Bachelor of Science in Computer Science</span> program at <span className="font-semibold text-sky-700">Bohol Island State University (BISU) - Calape Campus</span>.
+                        Dedicated to building technology that strengthens the academic community.
+                      </p>
+                    </div>
                   </div>
-                  <h4 className="font-bold text-slate-800">Academic Background</h4>
                 </div>
-                <p className="text-slate-600 leading-relaxed">
-                  Both are dedicated <span className="text-slate-900 font-semibold">Bachelor of Science in Computer Science</span> students at <span className="text-sky-600 font-semibold italic">Bohol Island State University (BISU) - Calape Campus</span>.
-                  Driven by technology and community-building, they developed TutorFriends to empower Filipino students through peer-to-peer knowledge sharing.
-                </p>
               </div>
             </div>
           </Modal>
 
-          <div className="border-t border-gradient-to-r from-transparent via-slate-600 to-transparent pt-7 sm:pt-10 text-center relative">
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-px bg-gradient-to-r from-transparent via-sky-500 to-transparent"></div>
-            <p className="text-slate-400 text-base font-medium">&copy; {new Date().getFullYear()} TutorFriends. All rights reserved.</p>
-            <button
-              onClick={() => setDevelopersOpen(true)}
-              className="mt-3 text-sm text-slate-500 hover:text-sky-400 transition-colors"
-            >
-              Developed by <span className="font-bold text-sky-500">BahandiSoft</span>
-            </button>
+          <div className="border-t border-slate-800/50 pt-8 mt-8 text-center">
+            <p className="text-slate-500 text-sm mb-4">&copy; {new Date().getFullYear()} TutorFriends. All rights reserved.</p>
+
+            <div className="inline-flex items-center justify-center p-1 rounded-full bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm transition-all duration-300 hover:bg-slate-800 hover:border-sky-500/30 group cursor-pointer" onClick={() => setDevelopersOpen(true)}>
+              <span className="px-3 py-1 text-xs text-slate-400 group-hover:text-slate-300 transition-colors">Developed by</span>
+              <span className="px-3 py-1 text-xs font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400 group-hover:from-sky-300 group-hover:to-indigo-300 rounded-full bg-white/5 border border-white/5 shadow-sm transition-all">
+                BahandiSoft
+              </span>
+            </div>
           </div>
         </div>
       </footer>

@@ -228,17 +228,21 @@ const AdminLoginSlideshow: React.FC = () => {
   const [index, setIndex] = React.useState(0);
   const slides = React.useMemo(() => [
     {
+      src: 'assets/images/dev_slideMain.jpg',
+      alt: 'Company CEO',
+    },
+    {
+      src: 'assets/images/dev_slide1.png',
+      alt: 'Company COO',
+    },
+    {
       src: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?q=80&w=2070&auto=format&fit=crop',
       alt: 'Admin reviewing dashboard analytics charts',
     },
     {
-      src: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=2070&auto=format&fit=crop',
-      alt: 'Team collaboration with laptops in modern office',
-    },
-    {
       src: 'https://images.unsplash.com/photo-1552581234-26160f608093?q=80&w=2070&auto=format&fit=crop',
       alt: 'Secure admin operations on computer',
-    },
+    }
   ], []);
 
   React.useEffect(() => {
