@@ -96,7 +96,7 @@ const slides: Slide[] = [
     alt: 'The CEO & Developer of the companys'
   },
   {
-    src: '/assets/images/dev_slide1c.png',
+    src: '/assets/images/dev_slide1c.jpg',
     alt: 'The Project Manager of the company'
   },
   {
@@ -1032,7 +1032,7 @@ const LandingPage: React.FC = () => {
                         <div className="absolute -inset-4 bg-sky-100/50 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         <div className="relative w-32 h-32 rounded-2xl -rotate-3 overflow-hidden border-4 border-white shadow-xl ring-1 ring-sky-100">
                           <img
-                            src="/assets/images/dev_slide1c.png" // COO
+                            src="/assets/images/dev_slide1c.jpg" // COO
                             alt="COO"
                             className="w-full h-full object-cover"
                           />
