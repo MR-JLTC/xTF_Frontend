@@ -228,11 +228,11 @@ const AdminLoginSlideshow: React.FC = () => {
   const [index, setIndex] = React.useState(0);
   const slides = React.useMemo(() => [
     {
-      src: 'assets/images/dev_slideMainc.jpg',
+      src: 'assets/images/dev_slideMain.jpg',
       alt: 'Company CEO',
     },
     {
-      src: 'assets/images/dev_slide1c.png',
+      src: 'assets/images/dev_slide1c.jpg',
       alt: 'Company COO',
     },
     {
