@@ -232,7 +232,7 @@ const AdminLoginSlideshow: React.FC = () => {
       alt: 'Company CEO',
     },
     {
-      src: 'assets/images/dev_slide1c.jpg',
+      src: 'assets/images/dev_slide1.png',
       alt: 'Company COO',
     },
     {

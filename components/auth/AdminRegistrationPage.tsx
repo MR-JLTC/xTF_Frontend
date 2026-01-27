@@ -909,6 +909,14 @@ const AdminRegisterSlideshow: React.FC = () => {
   const [index, setIndex] = React.useState(0);
   const slides = React.useMemo(() => [
     {
+      src: 'assets/images/dev_slideMain.jpg',
+      alt: 'Company CEO',
+    },
+    {
+      src: 'assets/images/dev_slide1.png',
+      alt: 'Company COO',
+    },
+    {
       src: 'https://images.unsplash.com/photo-1552581234-26160f608093?q=80&w=2070&auto=format&fit=crop',
       alt: 'Admin secure registration environment',
     },
