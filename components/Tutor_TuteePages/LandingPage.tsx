@@ -75,7 +75,13 @@ const LiveStats: React.FC = () => {
         return (
           <div key={label} className="bg-white/60 backdrop-blur-md rounded-2xl border border-white/50 p-6 text-center shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 group">
             <p className="text-slate-500 text-sm font-medium uppercase tracking-wider mb-2 group-hover:text-sky-600 transition-colors">{label}</p>
-            <p className="text-3xl lg:text-4xl font-black text-slate-800 mt-1 bg-gradient-to-br from-slate-900 to-slate-700 bg-clip-text text-transparent">{value !== undefined ? value.toLocaleString() : '—'}</p>
+            {value !== undefined ? (
+              <p className="text-3xl lg:text-4xl font-black text-slate-800 mt-1 bg-gradient-to-br from-slate-900 to-slate-700 bg-clip-text text-transparent transform transition-all duration-500 animate-in fade-in slide-in-from-bottom-2">
+                {value.toLocaleString()}
+              </p>
+            ) : (
+              <div className="h-8 w-24 mx-auto mt-2 bg-slate-200/80 rounded-lg animate-pulse"></div>
+            )}
           </div>
         );
       })}
@@ -232,6 +238,7 @@ const LandingPage: React.FC = () => {
   const [tutorModalKey, setTutorModalKey] = useState(0);
   const [tuteeModalKey, setTuteeModalKey] = useState(0);
   const [partnerUniversities, setPartnerUniversities] = useState<Array<{ university_id: number; name: string; logo_url?: string; status?: string }>>([]);
+  const [isLoadingUniversities, setIsLoadingUniversities] = useState(true);
   const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
@@ -360,6 +367,10 @@ const LandingPage: React.FC = () => {
         // Silent failure on polling
         if (mounted) {
           // console.error('Failed to fetch universities:', err);
+        }
+      } finally {
+        if (mounted) {
+          setIsLoadingUniversities(false);
         }
       }
     };
@@ -559,7 +570,17 @@ const LandingPage: React.FC = () => {
         <section className="px-4 sm:px-8 md:px-16 py-10 md:py-14 w-full">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-6">Partnered institutions</h2>
-            {partnerUniversities.length > 0 ? (
+
+            {isLoadingUniversities ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 sm:gap-8">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="flex flex-col items-center justify-start h-full p-6 bg-white rounded-2xl border border-slate-100 shadow-sm min-h-[160px] animate-pulse">
+                    <div className="h-20 w-20 rounded-full bg-slate-200 mb-4"></div>
+                    <div className="h-4 w-24 bg-slate-200 rounded"></div>
+                  </div>
+                ))}
+              </div>
+            ) : partnerUniversities.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 sm:gap-8">
                 {partnerUniversities.map((u) => (
                   <div key={u.university_id} className="group flex flex-col items-center justify-start h-full p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 min-h-[160px]">
