@@ -866,9 +866,6 @@ const LandingPage: React.FC = () => {
                   <button type="button" onClick={() => setDevelopersOpen(true)} className="text-left text-slate-400 hover:text-sky-400 transition-colors">Meet the Developers</button>
                 </li>
                 <li className="w-max">
-                  <button type="button" onClick={() => navigate('/admin-login')} className="text-left text-slate-400 hover:text-sky-400 transition-colors">Admin Portal</button>
-                </li>
-                <li className="w-max">
                   <button type="button" onClick={() => setPrivacyOpen(true)} className="text-left text-slate-400 hover:text-sky-400 transition-colors">Privacy Policy</button>
                 </li>
                 <li className="w-max">
