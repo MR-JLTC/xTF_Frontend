@@ -8,6 +8,7 @@ import { CheckCircleIcon } from '../../components/icons/CheckCircleIcon';
 import { DocumentArrowUpIcon } from '../../components/icons/DocumentArrowUpIcon';
 import { useToast } from '../../components/ui/Toast';
 import * as nsfwjs from 'nsfwjs';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
 
 interface TimeSlot {
   startTime: string;
@@ -50,6 +51,7 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
   prefilledUniversityId = ''
 }) => {
   const { notify } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedSubjects, setSelectedSubjects] = useState<Set<string>>(new Set<string>());
   const [isFileSelecting, setIsFileSelecting] = useState(false);
   const [warningModal, setWarningModal] = useState<{
@@ -1355,14 +1357,17 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    setIsLoading(true);
 
     // Prevent submission if file selection is in progress
     if (isFileSelecting) {
+      setIsLoading(false);
       return;
     }
 
     // Validation: Skip email/fullName checks if they're hidden (pre-filled from tutee)
     if (!hideEmailVerification && !email) {
+      setIsLoading(false);
       notify('Please enter email.', 'error');
       return;
     }
@@ -1371,6 +1376,7 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
       return;
     }
     if (!password || !universityId) {
+      setIsLoading(false);
       notify('Please enter password and select your university.', 'error');
       return;
     }
@@ -1414,7 +1420,8 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
       return;
     }
     if (!acceptedTerms) {
-      notify('Please accept the Terms and Conditions before submitting.', 'error');
+      setIsLoading(false);
+      notify('You must agree to the Terms and Conditions to proceed.', 'error');
       return;
     }
 
@@ -1615,13 +1622,14 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
       console.error('Error config:', err?.config);
 
       const message = err?.response?.data?.message || err?.response?.data?.error || err?.message || 'Failed to submit application';
-
       // Use the notify function from useToast hook
       if (typeof message === 'string' && message.toLowerCase().includes('email already registered')) {
         notify('Email already registered', 'error');
       } else {
         notify(`Submission failed: ${message}`, 'error');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -1659,7 +1667,8 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
           }
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center justify-between px-3 sm:px-5 lg:px-4 py-2.5 sm:py-3.5 lg:py-2 border-b border-slate-200/70 bg-gradient-to-r from-slate-50 to-white">
+          <div className="flex items-center justify-between px-3 sm:px-4 md:px-5 lg:px-4 py-2.5 sm:py-3 lg:py-2 border-b border-slate-200/70 bg-gradient-to-r from-slate-50 to-white">
+            <LoadingOverlay isLoading={isLoading} message="Submitting your application..." />
             <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
               <Logo className="h-10 w-10 sm:h-14 sm:w-14 lg:h-10 lg:w-10 flex-shrink-0" />
               <div className="min-w-0 flex-1">
@@ -1737,8 +1746,8 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
                             onChange={(e) => setEmail(e.target.value)}
                             disabled={!universityId}
                             className={`w-full px-3 sm:px-4 lg:px-3 py-2 sm:py-3 lg:py-2 text-sm sm:text-base lg:text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${emailDomainError ? 'border-red-400 bg-red-50' :
-                                !universityId ? 'border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed' :
-                                  'border-slate-300'
+                              !universityId ? 'border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed' :
+                                'border-slate-300'
                               }`}
                             placeholder={!universityId ? "Select a university first" : "Enter your university email"}
                             required
@@ -1803,10 +1812,10 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
                             onClick={handleInputCode}
                             disabled={!codeSent || isCodeExpired || isEmailVerified}
                             className={`w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-lg font-semibold transition-all duration-300 transform flex-shrink-0 ${isEmailVerified
-                                ? 'bg-green-100 text-green-800 border-2 border-green-300 cursor-default'
-                                : !codeSent || isCodeExpired
-                                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                  : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:scale-105 shadow-lg hover:shadow-xl'
+                              ? 'bg-green-100 text-green-800 border-2 border-green-300 cursor-default'
+                              : !codeSent || isCodeExpired
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:scale-105 shadow-lg hover:shadow-xl'
                               }`}
                             title={
                               isEmailVerified
@@ -1832,10 +1841,10 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
                             onClick={handleSendVerificationCode}
                             disabled={!email || !universityId || !!emailDomainError || isSendingCode || isEmailVerified || (codeSent && !isCodeExpired)}
                             className={`w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-lg font-semibold transition-all duration-300 transform flex-shrink-0 ${isEmailVerified
-                                ? 'bg-green-100 text-green-800 border-2 border-green-300 cursor-default'
-                                : !email || !universityId || emailDomainError || (codeSent && !isCodeExpired)
-                                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                  : 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 shadow-lg hover:shadow-xl'
+                              ? 'bg-green-100 text-green-800 border-2 border-green-300 cursor-default'
+                              : !email || !universityId || emailDomainError || (codeSent && !isCodeExpired)
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 shadow-lg hover:shadow-xl'
                               }`}
                             title={
                               isEmailVerified
@@ -2019,8 +2028,8 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
                             setSessionRate(cleaned);
                           }}
                           className={`w-full pl-6 sm:pl-7 pr-2 sm:pr-3 py-2 text-sm sm:text-base border rounded-lg ${sessionRateError
-                              ? 'border-red-400 bg-red-50 focus:ring-2 focus:ring-red-500 focus:border-red-500'
-                              : 'border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                            ? 'border-red-400 bg-red-50 focus:ring-2 focus:ring-red-500 focus:border-red-500'
+                            : 'border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
                             }`}
                           placeholder="e.g., 350"
                         />
@@ -2207,8 +2216,8 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
                         value={subjectToAdd}
                         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSubjectToAdd(e.target.value)}
                         className={`flex-grow w-full px-4 py-2 border rounded-lg focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 ${!universityId || !courseId
-                            ? 'border-slate-500 bg-slate-600/70 text-white/60 cursor-not-allowed'
-                            : 'border-slate-600 bg-slate-700 text-white'
+                          ? 'border-slate-500 bg-slate-600/70 text-white/60 cursor-not-allowed'
+                          : 'border-slate-600 bg-slate-700 text-white'
                           }`}
                         aria-label="Select a subject to add"
                         disabled={!universityId || !courseId}
@@ -2276,8 +2285,8 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
                             }}
                             placeholder="e.g., Astrophysics"
                             className={`flex-grow w-full px-4 py-2 border rounded-lg focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 placeholder-slate-400 ${!universityId || !courseId
-                                ? 'border-slate-500 bg-slate-700/60 text-white/60 cursor-not-allowed'
-                                : 'border-slate-600 bg-slate-700 text-white'
+                              ? 'border-slate-500 bg-slate-700/60 text-white/60 cursor-not-allowed'
+                              : 'border-slate-600 bg-slate-700 text-white'
                               }`}
                             disabled={!universityId || !courseId}
                             title={
@@ -2580,8 +2589,8 @@ const TutorRegistrationPage: React.FC<TutorRegistrationModalProps> = ({
                     <button
                       type="submit"
                       className={`w-full font-bold py-2.5 sm:py-3 px-4 sm:px-6 text-sm sm:text-base rounded-lg transition-colors relative z-50 ${isEmailVerified && acceptedTerms && termsViewed
-                          ? 'bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-                          : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                        ? 'bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                        : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                         }`}
                       disabled={!isEmailVerified || !acceptedTerms || !termsViewed}
                       onClick={(e) => {

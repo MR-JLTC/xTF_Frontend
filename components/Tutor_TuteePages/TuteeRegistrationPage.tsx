@@ -5,6 +5,7 @@ import { CheckCircleIcon } from '../../components/icons/CheckCircleIcon';
 import { useToast } from '../../components/ui/Toast';
 import Logo from '../../components/Logo';
 import { mapRoleToStorageKey, setRoleAuth, updateRoleUser } from '../../utils/authRole';
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
 
 interface TuteeRegistrationModalProps {
   isOpen?: boolean;
@@ -576,6 +577,7 @@ const TuteeRegistrationPage: React.FC<TuteeRegistrationModalProps> = ({ isOpen, 
         }
       >
         <div className="flex items-center justify-between px-3 sm:px-4 md:px-5 lg:px-4 py-2.5 sm:py-3 lg:py-2 border-b border-slate-200/70 bg-gradient-to-r from-slate-50 to-white">
+          <LoadingOverlay isLoading={isLoading} message="Creating your account..." />
           <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
             <Logo className="h-10 w-10 sm:h-12 sm:w-12 lg:h-10 lg:w-10 flex-shrink-0" />
             <div className="min-w-0 flex-1">
@@ -641,8 +643,8 @@ const TuteeRegistrationPage: React.FC<TuteeRegistrationModalProps> = ({ isOpen, 
                       onChange={handleInputChange}
                       disabled={!universityId}
                       className={`w-full px-3 sm:px-4 lg:px-3 py-2 sm:py-3 lg:py-2 text-sm sm:text-base lg:text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${emailDomainError ? 'border-red-400 bg-red-50' :
-                          !universityId ? 'border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed' :
-                            'border-slate-300'
+                        !universityId ? 'border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed' :
+                          'border-slate-300'
                         }`}
                       placeholder={!universityId ? "Select a university first" : "Enter your university email"}
                       name="email"
@@ -667,10 +669,10 @@ const TuteeRegistrationPage: React.FC<TuteeRegistrationModalProps> = ({ isOpen, 
                       onClick={handleInputCode}
                       disabled={!codeSent || isCodeExpired || isEmailVerified}
                       className={`w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-lg font-semibold transition-all duration-300 transform flex-shrink-0 ${isEmailVerified
-                          ? 'bg-green-100 text-green-800 border-2 border-green-300 cursor-default'
-                          : !codeSent || isCodeExpired
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:scale-105 shadow-lg hover:shadow-xl'
+                        ? 'bg-green-100 text-green-800 border-2 border-green-300 cursor-default'
+                        : !codeSent || isCodeExpired
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:scale-105 shadow-lg hover:shadow-xl'
                         }`}
                       title={
                         isEmailVerified
@@ -696,10 +698,10 @@ const TuteeRegistrationPage: React.FC<TuteeRegistrationModalProps> = ({ isOpen, 
                       onClick={handleSendVerificationCode}
                       disabled={Boolean(!formData.email || !universityId || emailDomainError || isSendingCode || isEmailVerified || (codeSent && !isCodeExpired))}
                       className={`w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-lg font-semibold transition-all duration-300 transform flex-shrink-0 ${isEmailVerified
-                          ? 'bg-green-100 text-green-800 border-2 border-green-300 cursor-default'
-                          : !formData.email || !universityId || emailDomainError || (codeSent && !isCodeExpired)
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 shadow-lg hover:shadow-xl'
+                        ? 'bg-green-100 text-green-800 border-2 border-green-300 cursor-default'
+                        : !formData.email || !universityId || emailDomainError || (codeSent && !isCodeExpired)
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'bg-blue-600 text-white hover:bg-blue-700 hover:scale-105 shadow-lg hover:shadow-xl'
                         }`}
                       title={
                         isEmailVerified
@@ -920,8 +922,8 @@ const TuteeRegistrationPage: React.FC<TuteeRegistrationModalProps> = ({ isOpen, 
                 <button
                   type="submit"
                   className={`mt-3 sm:mt-4 w-full font-bold py-2.5 sm:py-3 px-4 sm:px-6 text-sm sm:text-base rounded-lg transition-colors ${isEmailVerified && acceptedTerms && termsViewed
-                      ? 'bg-indigo-600 text-white hover:bg-indigo-700'
-                      : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                    ? 'bg-indigo-600 text-white hover:bg-indigo-700'
+                    : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                     }`}
                   disabled={!isEmailVerified || !acceptedTerms || !termsViewed}
                   title={
