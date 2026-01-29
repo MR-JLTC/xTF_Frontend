@@ -536,19 +536,33 @@ const SessionHandlingContent: React.FC = () => {
   return (
     <div className="space-y-3 sm:space-y-4 md:space-y-6 pb-6 sm:pb-8 md:pb-10">
       <ToastContainer aria-label="Notification messages" />
-      <div className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 text-white shadow-2xl relative overflow-hidden -mx-2 sm:-mx-3 md:mx-0">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 right-0 w-40 h-40 bg-white rounded-full -mr-20 -mt-20 blur-2xl"></div>
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white rounded-full -ml-16 -mb-16 blur-2xl"></div>
+      <div className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-r from-primary-600 via-primary-700 to-primary-900 shadow-2xl p-4 sm:p-6 md:p-8 -mx-2 sm:-mx-3 md:mx-0 transition-all duration-300">
+        {/* Modern Abstract Shapes Background */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white rounded-full blur-3xl opacity-60 animate-pulse"></div>
+          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary-400 rounded-full blur-3xl opacity-60"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
         </div>
-        <div className="relative flex items-center justify-between">
-          <div className="min-w-0 flex-1">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-1 drop-shadow-lg flex items-center gap-2 sm:gap-3">
-              <MessageSquare className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 flex-shrink-0" />
-              <span className="truncate">Session Handling</span>
+
+        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex-1 space-y-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight flex items-center gap-3 drop-shadow-md">
+              <div className="p-2 sm:p-2.5 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20 shadow-inner">
+                <MessageSquare className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+              </div>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-primary-100">
+                Session Handling
+              </span>
             </h1>
-            <p className="text-xs sm:text-sm md:text-base text-white/90 leading-tight">Manage booking requests and payment confirmations</p>
+            <p className="text-sm sm:text-base md:text-lg text-blue-50/90 font-medium max-w-2xl leading-relaxed pl-1">
+              Seamlessly manage your tutoring requests, track sessions, and monitor payments.
+            </p>
           </div>
+
+          {/* Optional: Add a subtle action button or indicator here if needed in future */}
+          {/* <div className="hidden md:block p-3 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-md">
+             <span className="text-xs font-bold text-white/80 uppercase tracking-widest">Active System</span>
+          </div> */}
         </div>
       </div>
 
